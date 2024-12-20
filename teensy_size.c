@@ -78,6 +78,7 @@ int main(int argc, char **argv)
 		uint32_t bss = elf_section_size(".bss");
 		uint32_t bss_dma = elf_section_size(".bss.dma");
 		uint32_t text_csf = elf_section_size(".text.csf");
+		uint32_t bss_extram = elf_section_size(".bss.extram");
 
 		uint32_t flash_total = text_headers + text_code + text_progmem
 			+ text_itcm + arm_exidx + data + text_csf;
@@ -120,12 +121,8 @@ int main(int argc, char **argv)
 			"%s   RAM2: variables:%u  free for malloc/new:%d\n",
 			(free_for_malloc < 0) ? "" : prefix,
 			ram2, free_for_malloc);
-		if (model == 0x25) {
-			uint32_t bss_extram = elf_section_size(".bss.extram");
-			if (bss_extram > 0) {
-				fprintf(fout,
-					"%s EXTRAM: variables:%u\n", prefix, bss_extram);
-			}
+		if (bss_extram > 0) {
+			fprintf(fout, "%s EXTRAM: variables:%u\n", prefix, bss_extram);
 		}
 		if (retval != 0) {
 			fprintf(fout,"Error program exceeds memory space\n");
